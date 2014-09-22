@@ -1,0 +1,70 @@
+#include "Calorimeter.hh"
+namespace HTransform 
+{
+	Calorimeter::Calorimeter(int x, int y, int z)
+	{
+		myPositiveEnergyPads = new vector< Pad * >();
+		myPadSystem = NULL;
+		myDimensions.push_back(x);
+		myDimensions.push_back(y);
+		myDimensions.push_back(z);
+	}
+	void Calorimeter::AddPadSystem(vector< vector< vector< Pad *> > > * pads)
+	{
+		myPadSystem = pads;
+	}
+	const Pad * Calorimeter::GetPad(int x, int y, int z) const
+	{
+	        return myPadSystem->at(x).at(y).at(z);
+	}
+	const vector< int > & Calorimeter::GetDimensions() const
+	{
+		return myDimensions;
+	}
+	const vector< Pad* > * Calorimeter::GetPads() const
+	{
+		return myPositiveEnergyPads;
+	}
+	const Pad * Calorimeter::GetPeakFromLayer(int z) const
+	{
+		float energy = 0.0;
+		Pad * result = NULL;
+		if (z < 0 || z > myDimensions[2]) 
+		{
+			return myPositiveEnergyPads->front();
+		}
+		for (int i = 0; i < myPositiveEnergyPads->size(); i++) 
+		{
+			Pad * pad = myPositiveEnergyPads->at(i);
+			if (pad->GetCoordinates()[2] == z && pad->GetEnergy() >energy) 
+			{
+				result = pad;
+				energy = pad->GetEnergy();
+			}
+		}
+		if (result == NULL) 
+		{
+			return myPositiveEnergyPads->front();
+		}
+		return result;
+	}
+
+	void Calorimeter::DimAllPads()
+	{
+		for (int i = 0; i < myPositiveEnergyPads->size(); i++) 
+		{
+			myPositiveEnergyPads->at(i)->Dim();
+		}
+		myPositiveEnergyPads->clear();
+	}
+
+	void Calorimeter::LightThePad(int x, int y, int z, float energy)
+	{
+		Pad * pad = myPadSystem->at(x).at(y).at(z);
+		if(pad->GetEnergy()==0.0) 
+		{
+			myPositiveEnergyPads->push_back(pad);
+		}
+		pad->SetEnergy(energy);
+	}
+} /* HTransform */

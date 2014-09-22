@@ -1,0 +1,40 @@
+#include "Pad.hh"
+#include <vector>
+#ifndef _Calorimeter_hh
+#define _Calorimeter_hh
+using std::vector;
+namespace HTransform 
+{
+	class Calorimeter 
+	{
+	public:
+		//
+		//	Constructor & Destructor
+		//
+		Calorimeter (int x, int y, int z);
+		virtual ~Calorimeter () {};
+		//
+		//	Methods
+		//
+		void AddPadSystem(vector< vector< vector< Pad *> > > * pads);
+		void LightThePad(int x, int y, int z, float energy);
+		void DimAllPads();
+		const Pad * GetPeakFromLayer(int z) const;
+		const Pad * GetPad(int x, int y, int z) const;
+		const vector< Pad* > * GetPads() const;
+		const vector< int > & GetDimensions() const;
+	private:
+		//
+		//	Methods
+		//
+	
+		//
+		//	Data
+		//
+		vector< Pad * > * myPositiveEnergyPads;
+		vector< vector< vector< Pad * > > > * myPadSystem;
+		vector< int > myDimensions;
+		/* data */
+	};
+} /* HTransform */
+#endif

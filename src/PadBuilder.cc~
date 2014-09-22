@@ -1,0 +1,126 @@
+#include "PadBuilder.hh"
+using std::vector;
+namespace HTransform 
+{
+	PadBuilder::PadBuilder (int granularity)
+	{
+		myGranularity = granularity;
+		if (granularity < 2) 
+		{
+			myGranularity = 10;
+		}
+		float dalpha = M_PI / (float) myGranularity;
+		float phi = 0.0;
+		float teta = 0.0;
+		
+		for (int i = 0; i < myGranularity; i++)
+		{
+			for (int j = 0; j < myGranularity; j++) 
+			{
+				vector<float> * angles = new vector<float>();
+				angles->push_back(phi);
+				angles->push_back(teta);
+
+				myAngles.push_back(angles);
+				if (teta == 0.0) 
+				{
+					break;
+				}
+				phi += dalpha;
+			}
+			phi = 0.0;
+			teta += dalpha;
+		}
+	}
+
+	Pad * PadBuilder::Build(int x, int y, int z, int id)
+	{
+		if (x < 0 || y < 0 || z < 0) 
+		{
+			return NULL;
+		}
+		Pad * result = new Pad(x,y,z, id);
+		insertLines(*result);
+		return result;
+	}
+
+	void PadBuilder::insertLines(Pad & pad)
+	{
+		vector<Line * > * lines = new vector<Line * >();
+		for (int i = 0; i < myAngles.size(); i++) 
+		{
+			Line * line = build(pad.GetCoordinate(0),pad.GetCoordinate(1),pad.GetCoordinate(2),myAngles[i]->at(0),myAngles[i]->at(1));
+			line->AddPadID(pad.GetID());
+			lines->push_back(line);
+		}
+		pad.SetLines(lines);
+	}
+
+	Line * PadBuilder::build(int x, int y, int z, float phi, float teta)
+	{
+		
+		/*float epsilon = 0.001;
+		float tan_alpha = tan(teta) * cos(phi);
+		float tan_beta =  tan(teta) * sin(phi);
+		float tan_gamma = 1 / tan(phi);
+		
+		if (teta < M_PI / 2.0 + epsilon && teta > M_PI / 2.0 - epsilon) 
+		{
+			tan_alpha = 1e10;
+			tan_beta = 1e10;
+		}
+		if (phi == 0.0) 
+		{
+			tan_gamma = 1e10;
+		}
+		float r_y = 1 / sqrt(1+tan_alpha*tan_alpha) * (z * tan_alpha - x);
+		float r_x = 1 / sqrt(1+tan_beta*tan_beta) * (z * tan_beta - y);
+		float r_z = 1 / sqrt(1+tan_gamma*tan_gamma) * (y * tan_gamma - x);
+		float hough_module = sqrt(r_x*r_x + r_y*r_y + r_z*r_z);
+
+		Line * result = new Line(phi, teta, hough_module);*/
+		return result;
+	}
+	vector< vector< int > * > * PadBuilder::getMagicNumbers()
+	{
+		vector< vector< int > * > * result = new vector< vector< int > * >();
+		for (int x = -2; x < 3; x++)
+		{
+		        for (int y = -2; y < 3; y++)
+			{
+			        int z = 2;
+				result->push_back(getPoint(x,y,z));
+			}
+			for (int y = -2; y < 3; y+=4)
+			{
+			        int z = 1;
+				result->push_back(getPoint(x,y,z));
+			}
+			int y = -2;
+			int z = 0;
+			result->push_back(getPoint(x,y,z));
+
+		}
+		for (int x = -2; x < 3; x+=4)
+		{
+		        for (int y = -1; y < 2; y++)
+			{
+				int z = 1;
+				result->push_back(getPoint(x,y,z));
+
+			}
+			int y = -1;
+			int z = 0;
+			result->push_back(getPoint(x,y,z));
+		}
+		return result;
+	}
+	vector< int > * PadBuilder::getPoint(int x, int y, int z)
+	{
+		vector< int > * point = new vector< int >();
+		point->push_back(x);
+		point->push_back(y);
+		point->push_back(z);
+		return point;
+	}
+} /* HTransform */
