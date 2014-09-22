@@ -37,7 +37,7 @@ namespace HTransform
 	bool TransformOperator::addLineToTracks(Line * line, bool add)
 	{
 		bool added = false;
-		for (int i = 0; i < myTracks->size(); i++) 
+		/*for (int i = 0; i < myTracks->size(); i++) 
 		{
 			Track * track = myTracks->at(i);
 			if (track->CheckMatch(line, myPrecision)) 
@@ -46,7 +46,7 @@ namespace HTransform
 				added = true;
 				//break;
 			}
-		}
+		}*/
 		if (!added && add)
 		{
 			Track * track = new Track();
@@ -115,10 +115,10 @@ namespace HTransform
 	}
 	bool TransformOperator::filter(Track * track)
 	{
-		if (track->GetSize() < myGroupesCutoff) 
+		/*if (track->GetSize() < myGroupesCutoff) 
 		{
 			return false;
-		}
+		}*/
 		/*if (track->GetSize() < myGroupesCutoff * 2 && track->GetVector()->at(0) == 0.0 && track->GetVector()->at(1) == 0.0) 
 		{
 			return false;
