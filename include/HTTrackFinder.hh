@@ -18,7 +18,7 @@
 #include <UTIL/CellIDDecoder.h>
 #include "Track.hh"
 #include "CalorimeterBuilder.hh"
-#include "HTransformOperator.hh"
+#include "TransformOperator.hh"
 namespace CALICE 
 {
 	class HTTrackFinder : public marlin::Processor 

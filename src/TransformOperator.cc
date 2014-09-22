@@ -1,17 +1,17 @@
-#include "HTransformOperator.hh"
+#include "TransformOperator.hh"
 #include <iostream>
 using std::cout;
 using std::vector;
 namespace HTransform 
 {
-	HTransformOperator:: HTransformOperator()
+	TransformOperator:: TransformOperator()
 	{
 		myGroupesCutoff = 4;
 		myPrecision = 0.2;
 		myTracks = new vector< Track * >();
 	}
 
-	void HTransformOperator::Process(const vector< Pad * > * pads, const Pad * interactionPad)
+	void TransformOperator::Process(const vector< Pad * > * pads, const Pad * interactionPad)
 	{
 		if (interactionPad) 
 		{
@@ -34,7 +34,7 @@ namespace HTransform
 			}
 		}
 	}
-	bool HTransformOperator::addLineToTracks(Line * line, bool add)
+	bool TransformOperator::addLineToTracks(Line * line, bool add)
 	{
 		bool added = false;
 		for (int i = 0; i < myTracks->size(); i++) 
@@ -57,7 +57,7 @@ namespace HTransform
 	}
 	
 
-	vector<float> * HTransformOperator::GetSolidAngles()
+	vector<float> * TransformOperator::GetSolidAngles()
 	{
 		vector<float> * result = new vector<float>();
 		int number = myTracks->size();
@@ -76,7 +76,7 @@ namespace HTransform
 		}
 		return result;
 	}
-	std::vector<float> * HTransformOperator::GetHoughModules()
+	std::vector<float> * TransformOperator::GetHoughModules()
 	{
 		vector<float> * result = new vector<float>();
 		//cout << "Modules:\n";
@@ -99,7 +99,7 @@ namespace HTransform
 		}
 		return result;
 	}
-	vector< Track * > * HTransformOperator::GetTracks()
+	vector< Track * > * TransformOperator::GetTracks()
 	{
 		vector< Track * > * result = new vector< Track * >();
 		int number = myTracks->size();
@@ -113,7 +113,7 @@ namespace HTransform
 		}
 		return result;
 	}
-	bool HTransformOperator::filter(Track * track)
+	bool TransformOperator::filter(Track * track)
 	{
 		if (track->GetSize() < myGroupesCutoff) 
 		{

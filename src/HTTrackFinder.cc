@@ -12,7 +12,7 @@ using HTransform::Track;
 using HTransform::PadBuilder;
 using HTransform::Calorimeter;
 using HTransform::CalorimeterBuilder;
-using HTransform::HTransformOperator;
+using HTransform::TransformOperator;
 using HTransform::Line;
 namespace CALICE 
 {
@@ -88,7 +88,7 @@ namespace CALICE
 					int pady = cd(aHit)["J"]-1;
 					myECal->LightThePad(waferx * 6 + padx,wafery * 6 + pady, cd(aHit)["K-1"], aHit->getEnergy());
 				}
-				HTransformOperator opera;
+				TransformOperator opera;
 				cout << "IsInteraction: " << IsInteraction << ", InteractionZ: " << InteractionZ << '\n';
 				//const Pad * intPad = myECal->GetPeakFromLayer(InteractionZ);
 				opera.Process(myECal->GetTrackPads(), NULL);

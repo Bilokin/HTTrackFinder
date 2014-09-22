@@ -1,17 +1,17 @@
 #include "Pad.hh"
 #include "Track.hh"
-#ifndef _HTransformOperator_hh
-#define _HTransformOperator_hh
+#ifndef _TransformOperator_hh
+#define _TransformOperator_hh
 namespace HTransform 
 {
-	class HTransformOperator 
+	class TransformOperator 
 	{
 	public:
 		//
 		//	Constructor & Destructor
 		//
-		HTransformOperator ();
-		virtual ~HTransformOperator () 
+		TransformOperator ();
+		virtual ~TransformOperator () 
 		{ 
 			delete myTracks;
 		};
