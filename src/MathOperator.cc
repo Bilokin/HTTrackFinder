@@ -32,7 +32,7 @@ namespace HTransform
 		return sqrt(sqr);
 	}
 	
-	float MathOperator::getModule(vector< int > & v)
+	float MathOperator::getModule(const vector< int > & v)
 	{
 	       float module = 0.0;
 	       for (int i = 0; i < v.size(); i++)
@@ -43,7 +43,7 @@ namespace HTransform
 	       return module;
 	}
 	
-	float MathOperator::getModule(vector< float > & v)
+	float MathOperator::getModule(const vector< float > & v)
 	{
 		float module = 0.0;
 		for (int i = 0; i < v.size(); i++)
@@ -90,7 +90,7 @@ namespace HTransform
 		return vector1;
 	}
 
-	vector< float > * MathOperator::vectorProduct(vector< float > & v1, vector< float > & v2)
+	vector< float > * MathOperator::vectorProduct(const vector< float > & v1, const vector< float > & v2)
 	{
 		vector<float> * result = new vector<float>();
 		result->push_back(v1[1]*v2[2]-v1[2]*v2[1]);
@@ -99,7 +99,7 @@ namespace HTransform
 		return result;
 	}
 
-	float MathOperator::getDistanceTo(vector< int > & vectorPoint1, vector< float > & vector1,const vector< int > * point )
+	float MathOperator::getDistanceTo( const vector< int > & vectorPoint1, const vector< float > & vector1,const vector< int > * point )
 	{
 		float result = 0.0;
 		//vector< float > vector1 = getDirection(vectorPoint1,vectorPoint2);
@@ -176,6 +176,43 @@ namespace HTransform
 			result->push_back(getPoint(x,y,z));
 		}
 		result->push_back(getPoint(2,0,0));
+		/*vector<int> additional = *getPoint(3,4,6);
+		for (int i = 0; i < 3; i++) 
+		{
+			for (int j = -1; j < 2; j+=2) 
+			{
+				result->push_back(getPoint(additional[i],j,0));
+				result->push_back(getPoint(additional[i],0,j));
+				result->push_back(getPoint(0,additional[i],j));
+				result->push_back(getPoint(j,additional[i],0));
+				result->push_back(getPoint(j,0,additional[i]));
+				result->push_back(getPoint(0,j,additional[i]));
+			}
+		}*/
+		int z = 3;
+		for (int y = -2; y < 3; y++) 
+		{
+			for (int x = -2; x < 3; x++) 
+			{
+				if (x == 0 && y == 0) 
+				{
+					continue;
+				}
+				result->push_back(getPoint(x,y,z));
+			}
+		}
+		z = 4;
+		for (int y = -1; y < 2; y++) 
+		{
+			for (int x = -1; x < 2; x++) 
+			{
+				if (x == 0 && y == 0) 
+				{
+					continue;
+				}
+				result->push_back(getPoint(x,y,z));
+			}
+		}
 		return result;
 	}
 	vector< int > * MathOperator::getPoint(int x, int y, int z)

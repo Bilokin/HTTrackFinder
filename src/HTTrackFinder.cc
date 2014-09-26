@@ -70,14 +70,13 @@ namespace CALICE
 				LCCollection* col_hits = evtP->getCollection( _colName ) ;
 				CellIDDecoder<CalorimeterHit> cd(col_hits);
 				int numberOfHits = col_hits->getNumberOfElements();
-				cout << "Event #" << _eventNumber++ << '\n';
 				int IsInteraction = col_hits->parameters().getIntVal("isInteraction");
 				int InteractionZ = col_hits->parameters().getIntVal("InteractionLayer");
 				if (!IsInteraction) 
 				{
 					return;
 				}
-				cout << "Interaction\n";
+				cout << "Event #" << _eventNumber++ << '\n';
 				for ( int hit_i = 0 ; hit_i < numberOfHits ; hit_i++ )
 				{
 				        vector< float > v;

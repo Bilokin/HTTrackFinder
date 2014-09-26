@@ -1,9 +1,10 @@
 #include <Line.hh>
 using std::vector;
 using std::sqrt;
+using std::abs;
 namespace HTransform 
 {
-	 const float Line::PRECISION = 0.02;
+	 const float Line::PRECISION = 1.0; 
 	 Line::Line (const vector< int > * point, vector< float > * lineVector, float hough, int id)
 	 {
 		myPadID = 0;
@@ -37,8 +38,14 @@ namespace HTransform
 	 	}
 		//float precision =  PRECISION;// + sin(myParameters[1]) *sin(myParameters[1])*0.1;
 		if (another.GetParameters()[0] < myParameters[0] + precision && another.GetParameters()[0] > myParameters[0] - precision) 
+		//float difference = abs(another.GetParameters()[0] - myParameters[0]);
+		//if (difference < PRECISION) 
 		{
-			return true;
+		//	float distance = sqrt(1- difference*difference);
+		//	if (distance > precision) 
+		//	{
+				return true;
+		//	}
 		}
 		return false;
 	 }

@@ -7,8 +7,9 @@ namespace HTransform
 	TransformOperator:: TransformOperator()
 	{
 		myGroupesCutoff = 4;
-		myPrecision = 0.2;
+		myPrecision = 0.1;
 		myTracks = new vector< Track * >();
+		myNonfilteredTracks = new vector< Track * >();
 	}
 
 	void TransformOperator::Process(const vector< Pad * > * pads, const Pad * interactionPad)
@@ -21,7 +22,7 @@ namespace HTransform
 			{
 				Track * track = new Track();
 				track->AddLine(interactionPad->GetLines()->at(i));
-				myTracks->push_back(track);
+				myNonfilteredTracks->push_back(track);
 			}
 		}
 		for (int i = 0; i < pads->size(); i++) 
@@ -33,25 +34,32 @@ namespace HTransform
 				addLineToTracks(line, !interactionPad);
 			}
 		}
+		for (int i = 0; i < myNonfilteredTracks->size(); i++) 
+		{
+			if (filter(myNonfilteredTracks->at(i))) 
+			{
+				myTracks->push_back(myNonfilteredTracks->at(i));
+			}
+		}
 	}
 	bool TransformOperator::addLineToTracks(Line * line, bool add)
 	{
 		bool added = false;
-		/*for (int i = 0; i < myTracks->size(); i++) 
+		for (int i = 0; i < myNonfilteredTracks->size(); i++) 
 		{
-			Track * track = myTracks->at(i);
+			Track * track = myNonfilteredTracks->at(i);
 			if (track->CheckMatch(line, myPrecision)) 
 			{
 				track->AddLine(line);
 				added = true;
 				//break;
 			}
-		}*/
+		}
 		if (!added && add)
 		{
 			Track * track = new Track();
 			track->AddLine(line);
-			myTracks->push_back(track);
+			myNonfilteredTracks->push_back(track);
 		}
 		return added;
 	}
@@ -64,7 +72,7 @@ namespace HTransform
 		for (int i = 0; i < number; i++) 
 		{
 			Track * track = myTracks->at(i);
-			if (filter(track)) 
+			//if (filter(track)) 
 			{
 				int size = track->GetSize();
 				float solid_angle = track->GetID();//track->GetVector()->at(0) + 10 * track->GetVector()->at(1) + 100*track->GetVector()->at(2);
@@ -84,7 +92,7 @@ namespace HTransform
 		for (int i = 0; i < number; i++)
 		{
 			Track * track = myTracks->at(i);
-			if (filter(track))
+			//if (filter(track))
 			{
 			        int size = track->GetSize();
 				vector< float > * modules = track->GetModules();
@@ -106,7 +114,7 @@ namespace HTransform
 		for (int i = 0; i < number; i++)
 		{
 		        Track * track = myTracks->at(i);
-			if (filter(track))
+			//if (filter(track))
 			{
 				result->push_back(track);
 			}
@@ -115,10 +123,25 @@ namespace HTransform
 	}
 	bool TransformOperator::filter(Track * track)
 	{
-		/*if (track->GetSize() < myGroupesCutoff) 
+		if (track->GetSize() < myGroupesCutoff) 
 		{
 			return false;
-		}*/
+		}
+		float weight = 0.0;
+		const vector<int> * point = track->GetLines()->front()->GetPoint();
+		const vector< float > * vec = track->GetLines()->front()->GetVector();
+		int number = track->GetSize();
+		for (int i = 0; i < number; i++) 
+		{
+			const vector<int> * another =  track->GetLines()->at(i)->GetPoint();
+			float module =  MathOperator::getDistanceTo(*another,*vec,point);
+			weight += module/number;
+		}
+		if (weight > 1.0) 
+		{
+			return false;
+		}
+		std::cout << "ID: " << track->GetID() << " Size: " << number << " Weight: " << weight << '\n';
 		/*if (track->GetSize() < myGroupesCutoff * 2 && track->GetVector()->at(0) == 0.0 && track->GetVector()->at(1) == 0.0) 
 		{
 			return false;

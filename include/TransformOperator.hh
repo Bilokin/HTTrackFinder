@@ -1,5 +1,6 @@
 #include "Pad.hh"
 #include "Track.hh"
+#include "MathOperator.hh"
 #ifndef _TransformOperator_hh
 #define _TransformOperator_hh
 namespace HTransform 
@@ -33,6 +34,7 @@ namespace HTransform
 		//	Data
 		//
 		std::vector< Track * > * myTracks;
+		std::vector< Track * > * myNonfilteredTracks;
 		int myGroupesCutoff;
 		float myPrecision;
 	};

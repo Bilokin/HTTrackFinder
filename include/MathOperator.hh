@@ -20,14 +20,14 @@ namespace HTransform
 		//
 		//	Methods
 		//
-			static float getModule(std::vector< int > & v);
-			static float getModule(std::vector< float > & v);
+			static float getModule(const std::vector< int > & v);
+			static float getModule(const std::vector< float > & v);
 
 			static bool approximatelyEqual(const double * start1, const double * end);
 			static float getDistance(const double * start, const double * end);
-			static std::vector< float > * vectorProduct(std::vector< float > & v1, std::vector< float > & v2);
+			static std::vector< float > * vectorProduct(const std::vector< float > & v1,const std::vector< float > & v2);
 			
-			static float getDistanceTo(std::vector< int > & vectorPoint1, std::vector< float > & vector1, const std::vector< int > * pointOfLine );
+			static float getDistanceTo(const std::vector< int > & vectorPoint1,const std::vector< float > & vector1, const std::vector< int > * pointOfLine );
 			static float getDistanceTo(const double * vectorPoint1, std::vector< float > & vector1,const double * pointOfLine );
 			
 			static std::vector< float > getDirection(std::vector< int > & vectorPoint1, std::vector< int > & vectorPoint2);
